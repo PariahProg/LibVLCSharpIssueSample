@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaApplication2.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vlc="clr-namespace:LibVLCSharp.Avalonia;assembly=LibVLCSharp.Avalonia"
+        xmlns:item="using:AvaloniaApplication2.Models"
+        x:Class="AvaloniaApplication2.Views.MainWindow"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication2"
+        Name="w">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+
+  <ItemsControl Items="{Binding CurrentItems}">
+    <ItemsControl.DataTemplates>
+      <DataTemplate DataType="{x:Type item:TextItem}">
+        <StackPanel>
+          <TextBlock Text="{Binding Name}"/>
+          <TextBox Text="{Binding Path=Text}" AcceptsReturn="True"/>
+        </StackPanel>
+      </DataTemplate>
+
+      <DataTemplate DataType="{x:Type item:ImageItem}">
+        <StackPanel>
+          <Image Source="{Binding Path=RelativePath, Converter={StaticResource bvc}}" Stretch="Uniform"/>
+          <TextBlock Text="{Binding Name}"/>
+        </StackPanel>
+      </DataTemplate>
+
+      <DataTemplate DataType="{x:Type item:VideoItem}">
+        <StackPanel>
+          <TextBlock Text="{Binding Name}"/>
+          <vlc:VideoView MediaPlayer="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MediaPlayer}" Height="300" Width="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+          <Button Content="Play" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.PlayVideoCommand}" CommandParameter="{Binding Path=RelativePath}" HorizontalAlignment="Center"  Width="100"/>
+        </StackPanel>
+      </DataTemplate>
+    </ItemsControl.DataTemplates>
+  </ItemsControl> 
+</Window>
+
